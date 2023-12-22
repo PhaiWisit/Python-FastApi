@@ -72,3 +72,4 @@ def delete_applicant(id: int):
         raise HTTPException(status_code=404, detail=f"todo item with id {id} not found")
 
     return None
+
