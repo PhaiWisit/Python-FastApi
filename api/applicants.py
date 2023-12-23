@@ -1,28 +1,38 @@
 from sqlalchemy.orm import Session
-from database import Base, engine, Applicants
-from fastapi import FastAPI,status,APIRouter, HTTPException, Path
-from api.models import ApplicantSchema
+from database.database import engine
+from database.models import  Applicant
+from fastapi import status,APIRouter,Depends, HTTPException
+from api.schemas import ApplicantCreate
+
+from api.auth_bearer import JWTBearer
 
 router = APIRouter()
 
 @router.post("/applicant", status_code=status.HTTP_201_CREATED)
-def create_applicant(payload: ApplicantSchema):
+def create_applicant(payload: ApplicantCreate):
     
     session = Session(bind=engine, expire_on_commit=False)
-    applicantDb = Applicants(fullName = payload.fullName)
-    session.add(applicantDb)
+    new_applicant = Applicant(
+        fullName = payload.fullName,
+        age = payload.age,
+        gender = payload.gender,
+        address = payload.address,
+        email = payload.email,
+        phone = payload.phone,
+        expectedSalary = payload.expectedSalary )
+    session.add(new_applicant)
     session.commit()
-    id = applicantDb.id
+    id = new_applicant.id
     session.close()
     
     return f"created applicant with id {id}"
 
 
 @router.get("/applicant/{id}")
-def read_applicant(id: int):
+def read_applicant(id: int,dependencies=Depends(JWTBearer())):
     
     session = Session(bind=engine, expire_on_commit=False)
-    applicant = session.query(Applicants).get(id)
+    applicant = session.query(Applicant).get(id)
     session.close()
     
     if not applicant:
@@ -32,23 +42,29 @@ def read_applicant(id: int):
 
 
 @router.get("/applicant")
-def read_applicant_list():
+def read_applicant_list(dependencies=Depends(JWTBearer())):
     
     session = Session(bind=engine, expire_on_commit=False)
-    applicant_list = session.query(Applicants).all()
+    applicant_list = session.query(Applicant).all()
     session.close()
 
     return applicant_list
 
 
 @router.put("/applicant/{id}")
-def update_applicant(id: int, payload: ApplicantSchema):
+def update_applicant(id: int, payload: ApplicantCreate,dependencies=Depends(JWTBearer())):
 
     session = Session(bind=engine, expire_on_commit=False)
-    applicant = session.query(Applicants).get(id)
+    applicant = session.query(Applicant).get(id)
 
     if applicant:
         applicant.fullName = payload.fullName
+        applicant.age = payload.age
+        applicant.gender = payload.gender
+        applicant.address = payload.address
+        applicant.email = payload.email
+        applicant.phone = payload.phone
+        applicant.expectedSalary = payload.expectedSalary
         session.commit()
     session.close()
 
@@ -59,10 +75,10 @@ def update_applicant(id: int, payload: ApplicantSchema):
 
 
 @router.delete("/applicant/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_applicant(id: int):
+def delete_applicant(id: int,dependencies=Depends(JWTBearer())):
 
     session = Session(bind=engine, expire_on_commit=False)
-    applicant = session.query(Applicants).get(id)
+    applicant = session.query(Applicant).get(id)
 
     if applicant:
         session.delete(applicant)
@@ -72,3 +88,4 @@ def delete_applicant(id: int):
         raise HTTPException(status_code=404, detail=f"todo item with id {id} not found")
 
     return None
+
