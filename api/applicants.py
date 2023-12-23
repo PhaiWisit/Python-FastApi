@@ -1,15 +1,22 @@
 from sqlalchemy.orm import Session
-from database import Base, engine, Applicants
-from fastapi import FastAPI,status,APIRouter, HTTPException, Path
-from api.models import ApplicantSchema
+from database import engine, Applicants
+from fastapi import status,APIRouter, HTTPException, Path
+from api.models import ApplicantModel
 
 router = APIRouter()
 
 @router.post("/applicant", status_code=status.HTTP_201_CREATED)
-def create_applicant(payload: ApplicantSchema):
+def create_applicant(payload: ApplicantModel):
     
     session = Session(bind=engine, expire_on_commit=False)
-    applicantDb = Applicants(fullName = payload.fullName)
+    applicantDb = Applicants(
+        fullName = payload.fullName,
+        age = payload.age,
+        gender = payload.gender,
+        address = payload.address,
+        email = payload.email,
+        phone = payload.phone,
+        expectedSalary = payload.expectedSalary )
     session.add(applicantDb)
     session.commit()
     id = applicantDb.id
@@ -42,7 +49,7 @@ def read_applicant_list():
 
 
 @router.put("/applicant/{id}")
-def update_applicant(id: int, payload: ApplicantSchema):
+def update_applicant(id: int, payload: ApplicantModel):
 
     session = Session(bind=engine, expire_on_commit=False)
     applicant = session.query(Applicants).get(id)
