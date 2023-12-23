@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>API Documentation</title>
+  </head>
+  <body>
+    <h1>API Documentation</h1>
+
+    <h2>Create Applicant</h2>
+    <p>Creates a new applicant with the provided data.</p>
+    <pre>
+    <code>
+        POST /applicant
+        Request Body:
+        {
+            "fullName": "John Doe"
+        }
+        Response:
+        Status Code: 201 Created
+        Body: "created applicant with id {id}"
+    </code>
+</pre>
+
+    <h2>Read Applicant</h2>
+    <p>Reads an applicant by ID.</p>
+    <pre>
+    <code>
+        GET /applicant/{id}
+        Response:
+        Status Code: 200 OK
+        Body: {
+            "id": 1,
+            "fullName": "John Doe"
+        }
+    </code>
+</pre>
+
+    <h2>Read Applicant List</h2>
+    <p>Reads the list of all applicants.</p>
+    <pre>
+    <code>
+        GET /applicant
+        Response:
+        Status Code: 200 OK
+        Body: [
+            {
+                "id": 1,
+                "fullName": "John Doe"
+            },
+            ...
+        ]
+    </code>
+</pre>
+
+    <h2>Update Applicant</h2>
+    <p>Updates an applicant by ID with the provided data.</p>
+    <pre>
+    <code>
+        PUT /applicant/{id}
+        Request Body:
+        {
+            "fullName": "Updated Name"
+        }
+        Response:
+        Status Code: 200 OK
+        Body: {
+            "id": 1,
+            "fullName": "Updated Name"
+        }
+    </code>
+</pre>
+
+    <h2>Delete Applicant</h2>
+    <p>Deletes an applicant by ID.</p>
+    <pre>
+    <code>
+        DELETE /applicant/{id}
+        Response:
+        Status Code: 204 No Content
+    </code>
+</pre>
+  </body>
+</html>
