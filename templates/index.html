@@ -13,13 +13,19 @@
         POST /applicant
         Request Body:
         {
-            "fullName": "John Doe"
+            "fullName": "John Doe",
+            "age": 25,
+            "gender": "Male",
+            "address": "123 Main St",
+            "email": "john.doe@example.com",
+            "phone": "123-456-7890",
+            "expectedSalary": 50000
         }
         Response:
         Status Code: 201 Created
         Body: "created applicant with id {id}"
     </code>
-</pre>
+    </pre>
 
     <h2>Read Applicant</h2>
     <p>Reads an applicant by ID.</p>
@@ -30,10 +36,16 @@
         Status Code: 200 OK
         Body: {
             "id": 1,
-            "fullName": "John Doe"
+            "fullName": "John Doe",
+            "age": 25,
+            "gender": "Male",
+            "address": "123 Main St",
+            "email": "john.doe@example.com",
+            "phone": "123-456-7890",
+            "expectedSalary": 50000
         }
     </code>
-</pre>
+    </pre>
 
     <h2>Read Applicant List</h2>
     <p>Reads the list of all applicants.</p>
@@ -45,12 +57,18 @@
         Body: [
             {
                 "id": 1,
-                "fullName": "John Doe"
+                "fullName": "John Doe",
+                "age": 25,
+                "gender": "Male",
+                "address": "123 Main St",
+                "email": "john.doe@example.com",
+                "phone": "123-456-7890",
+                "expectedSalary": 50000
             },
             ...
         ]
     </code>
-</pre>
+    </pre>
 
     <h2>Update Applicant</h2>
     <p>Updates an applicant by ID with the provided data.</p>
@@ -59,16 +77,28 @@
         PUT /applicant/{id}
         Request Body:
         {
-            "fullName": "Updated Name"
+            "fullName": "Updated Name",
+            "age": 30,
+            "gender": "Female",
+            "address": "456 Oak St",
+            "email": "updated.name@example.com",
+            "phone": "987-654-3210",
+            "expectedSalary": 60000
         }
         Response:
         Status Code: 200 OK
         Body: {
             "id": 1,
-            "fullName": "Updated Name"
+            "fullName": "Updated Name",
+            "age": 30,
+            "gender": "Female",
+            "address": "456 Oak St",
+            "email": "updated.name@example.com",
+            "phone": "987-654-3210",
+            "expectedSalary": 60000
         }
     </code>
-</pre>
+    </pre>
 
     <h2>Delete Applicant</h2>
     <p>Deletes an applicant by ID.</p>
@@ -78,6 +108,69 @@
         Response:
         Status Code: 204 No Content
     </code>
-</pre>
+    </pre>
+
+    <h2>Get CSV</h2>
+    <p>Exports the list of applicants as a CSV file.</p>
+    <pre>
+    <code>
+        GET /get_csv
+        Response:
+        Status Code: 200 OK
+        Body: (CSV file download)
+    </code>
+    </pre>
+
+    <h2>User Registration</h2>
+    <p>Registers a new user with the provided username and password.</p>
+    <pre>
+    <code>
+        POST /auth/register
+        Request Body:
+        {
+            "username": "new_user",
+            "password": "secure_password"
+        }
+        Response:
+        Status Code: 200 OK
+        Body: {
+            "message": "User created successfully"
+        }
+    </code>
+    </pre>
+
+    <h2>User Login</h2>
+    <p>Logs in a user and provides access and refresh tokens.</p>
+    <pre>
+    <code>
+        POST /auth/login
+        Request Body:
+        {
+            "username": "existing_user",
+            "password": "existing_password"
+        }
+        Response:
+        Status Code: 200 OK
+        Body: {
+            "access_token": "generated_access_token",
+            "refresh_token": "generated_refresh_token"
+        }
+    </code>
+    </pre>
+
+    <h2>User Logout</h2>
+    <p>Logs out a user by invalidating the provided access token.</p>
+    <pre>
+    <code>
+        POST /auth/logout
+        Authorization Header:
+        Bearer {access_token}
+        Response:
+        Status Code: 200 OK
+        Body: {
+            "message": "Logout Successfully"
+        }
+    </code>
+    </pre>
   </body>
 </html>
