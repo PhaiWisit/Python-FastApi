@@ -1,4 +1,8 @@
-__pycache__/database.cpython-312.pyc
-__pycache__/main.cpython-312.pyc
-api/__pycache__/applicants.cpython-312.pyc
-api/__pycache__/models.cpython-312.pyc
+__pycache__
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+python-apply-job.code-workspace
+.gitignore
+

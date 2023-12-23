@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-class ApplicantModel(BaseModel):
+class ApplicantCreate(BaseModel):
     fullName: str
     age: int
     gender: str

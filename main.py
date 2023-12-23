@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request
-from database import Base, engine
-from api import applicants
+from database.database import Base, engine
+from api import applicants,exportCsv
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
@@ -21,13 +21,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 templates = Jinja2Templates(directory="templates")
 
-
-@app.get("/")
 @app.get("/", response_class=HTMLResponse)
 def root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request, "message": "Hello Applicants"})
+    return templates.TemplateResponse("index.html", {"request": request})
 app.include_router(applicants.router)
 app.include_router(exportCsv.router)

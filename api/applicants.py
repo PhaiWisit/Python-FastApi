@@ -1,15 +1,17 @@
 from sqlalchemy.orm import Session
-from database import engine, Applicants
+from database.database import engine
+from database.models import  Applicant
 from fastapi import status,APIRouter, HTTPException, Path
-from api.models import ApplicantModel
+from api.schemas import ApplicantCreate
+
 
 router = APIRouter()
 
 @router.post("/applicant", status_code=status.HTTP_201_CREATED)
-def create_applicant(payload: ApplicantModel):
+def create_applicant(payload: ApplicantCreate):
     
     session = Session(bind=engine, expire_on_commit=False)
-    applicantDb = Applicants(
+    new_applicant = Applicant(
         fullName = payload.fullName,
         age = payload.age,
         gender = payload.gender,
@@ -17,9 +19,9 @@ def create_applicant(payload: ApplicantModel):
         email = payload.email,
         phone = payload.phone,
         expectedSalary = payload.expectedSalary )
-    session.add(applicantDb)
+    session.add(new_applicant)
     session.commit()
-    id = applicantDb.id
+    id = new_applicant.id
     session.close()
     
     return f"created applicant with id {id}"
@@ -29,7 +31,7 @@ def create_applicant(payload: ApplicantModel):
 def read_applicant(id: int):
     
     session = Session(bind=engine, expire_on_commit=False)
-    applicant = session.query(Applicants).get(id)
+    applicant = session.query(Applicant).get(id)
     session.close()
     
     if not applicant:
@@ -42,20 +44,26 @@ def read_applicant(id: int):
 def read_applicant_list():
     
     session = Session(bind=engine, expire_on_commit=False)
-    applicant_list = session.query(Applicants).all()
+    applicant_list = session.query(Applicant).all()
     session.close()
 
     return applicant_list
 
 
 @router.put("/applicant/{id}")
-def update_applicant(id: int, payload: ApplicantModel):
+def update_applicant(id: int, payload: ApplicantCreate):
 
     session = Session(bind=engine, expire_on_commit=False)
-    applicant = session.query(Applicants).get(id)
+    applicant = session.query(Applicant).get(id)
 
     if applicant:
         applicant.fullName = payload.fullName
+        applicant.age = payload.age
+        applicant.gender = payload.gender
+        applicant.address = payload.address
+        applicant.email = payload.email
+        applicant.phone = payload.phone
+        applicant.expectedSalary = payload.expectedSalary
         session.commit()
     session.close()
 
@@ -69,7 +77,7 @@ def update_applicant(id: int, payload: ApplicantModel):
 def delete_applicant(id: int):
 
     session = Session(bind=engine, expire_on_commit=False)
-    applicant = session.query(Applicants).get(id)
+    applicant = session.query(Applicant).get(id)
 
     if applicant:
         session.delete(applicant)
