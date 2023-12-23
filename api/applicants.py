@@ -1,9 +1,10 @@
 from sqlalchemy.orm import Session
 from database.database import engine
 from database.models import  Applicant
-from fastapi import status,APIRouter, HTTPException, Path
+from fastapi import status,APIRouter,Depends, HTTPException
 from api.schemas import ApplicantCreate
 
+from api.auth_bearer import JWTBearer
 
 router = APIRouter()
 
@@ -28,7 +29,7 @@ def create_applicant(payload: ApplicantCreate):
 
 
 @router.get("/applicant/{id}")
-def read_applicant(id: int):
+def read_applicant(id: int,dependencies=Depends(JWTBearer())):
     
     session = Session(bind=engine, expire_on_commit=False)
     applicant = session.query(Applicant).get(id)
@@ -41,7 +42,7 @@ def read_applicant(id: int):
 
 
 @router.get("/applicant")
-def read_applicant_list():
+def read_applicant_list(dependencies=Depends(JWTBearer())):
     
     session = Session(bind=engine, expire_on_commit=False)
     applicant_list = session.query(Applicant).all()
@@ -51,7 +52,7 @@ def read_applicant_list():
 
 
 @router.put("/applicant/{id}")
-def update_applicant(id: int, payload: ApplicantCreate):
+def update_applicant(id: int, payload: ApplicantCreate,dependencies=Depends(JWTBearer())):
 
     session = Session(bind=engine, expire_on_commit=False)
     applicant = session.query(Applicant).get(id)
@@ -74,7 +75,7 @@ def update_applicant(id: int, payload: ApplicantCreate):
 
 
 @router.delete("/applicant/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_applicant(id: int):
+def delete_applicant(id: int,dependencies=Depends(JWTBearer())):
 
     session = Session(bind=engine, expire_on_commit=False)
     applicant = session.query(Applicant).get(id)
