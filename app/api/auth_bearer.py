@@ -1,11 +1,11 @@
 import jwt
-from jwt.exceptions import InvalidTokenError
+# from jwt.exceptions import InvalidTokenError
 from fastapi import FastAPI, Depends, HTTPException,status
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from database.models import TokenTable
+from app.database.models import TokenTable
 
-ACCESS_TOKEN_EXPIRE_MINUTES = 30  # 30 minutes
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 30 minutes
 REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7 # 7 days
 ALGORITHM = "HS256"
 JWT_SECRET_KEY = "narscbjim@$@&^@&%^&RFghgjvbdsha"   # should be kept secret
@@ -16,8 +16,8 @@ def decodeJWT(jwtoken: str):
         # Decode and verify the token
         payload = jwt.decode(jwtoken, JWT_SECRET_KEY, ALGORITHM)
         return payload
-    except InvalidTokenError:
-        return None
+    except :
+        return HTTPException(status_code=403, detail="Invalid authentication scheme.")
 
 
 class JWTBearer(HTTPBearer):

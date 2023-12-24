@@ -1,19 +1,19 @@
-from api import schemas
-from database import models
+from app.api import schemas
+from app.database import models
 from datetime import datetime 
-from database.database import Base, engine, SessionLocal
-from database.models import  User,TokenTable
+from app.database.database import Base, engine, SessionLocal
+from app.database.models import  User,TokenTable
 from fastapi import APIRouter, Depends, HTTPException,status
 from sqlalchemy.orm import Session
-from api.auth_bearer import JWTBearer
+from app.api.auth_bearer import JWTBearer
 
-ACCESS_TOKEN_EXPIRE_MINUTES = 30  # 30 minutes
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7
 REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7 # 7 days
 ALGORITHM = "HS256"
 JWT_SECRET_KEY = "narscbjim@$@&^@&%^&RFghgjvbdsha"   # should be kept secret
 JWT_REFRESH_SECRET_KEY = "13ugfdfgh@#$%^@&jkl45678902"
 
-from utils import create_access_token,create_refresh_token,verify_password,get_hashed_password
+from app.utils import create_access_token,create_refresh_token,verify_password,get_hashed_password
 import jwt
 
 router = APIRouter()

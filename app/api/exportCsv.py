@@ -5,8 +5,8 @@ import pandas as pd
 from datetime import datetime
 
 from sqlalchemy.orm import Session
-from database.database import Base, engine
-from database.models import  Applicant
+from app.database.database import Base, engine
+from app.database.models import  Applicant
 
 router = APIRouter()
 

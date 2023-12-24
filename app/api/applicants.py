@@ -1,10 +1,10 @@
 from sqlalchemy.orm import Session
-from database.database import engine
-from database.models import  Applicant
+from app.database.database import engine
+from app.database.models import  Applicant
 from fastapi import status,APIRouter,Depends, HTTPException
-from api.schemas import ApplicantCreate
+from app.api.schemas import ApplicantCreate
 
-from api.auth_bearer import JWTBearer
+from app.api.auth_bearer import JWTBearer
 
 router = APIRouter()
 
